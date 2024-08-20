@@ -5,9 +5,11 @@ import 'package:just_chat/Helper/firebase_helper.dart';
 import 'package:just_chat/Others/welcome_screen.dart';
 import 'package:just_chat/Chat%20Screens/chat_list.dart';
 import '../Models/user_model.dart';
-import 'Animation.dart';
+import 'animation.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -17,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 4), () async {
+    Timer(const Duration(seconds: 4), () async {
       User? currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser != null) {
@@ -26,11 +28,11 @@ class _SplashScreenState extends State<SplashScreen> {
         if (thisUserModel != null) {
           Navigator.pushReplacement(context, SlidePageRoute(page: ChatListScreen(userModel: thisUserModel, firebaseUser: currentUser)));
         } else {
-          Navigator.pushReplacement(context, SlidePageRoute(page: WelcomeScreen()));
+          Navigator.pushReplacement(context, SlidePageRoute(page: const WelcomeScreen()));
         }
       } else {
         // Not logged in
-        Navigator.pushReplacement(context, SlidePageRoute(page: WelcomeScreen()));
+        Navigator.pushReplacement(context, SlidePageRoute(page: const WelcomeScreen()));
       }
     });
   }
@@ -40,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         color: Colors.green,
-        child: Center(
+        child: const Center(
           child: Text(
             'Just Chat',
             style: TextStyle(

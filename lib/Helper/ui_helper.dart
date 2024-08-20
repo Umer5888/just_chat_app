@@ -5,14 +5,14 @@ class UIHelper {
   static void showLoadingDialog(BuildContext context, String title) {
     AlertDialog loadingDialog = AlertDialog(
       content: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
 
-            CircularProgressIndicator(),
+            const CircularProgressIndicator(),
 
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
 
             Text(title),
 
@@ -40,7 +40,7 @@ class UIHelper {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Ok"),
+          child: const Text("Ok"),
         ),
       ],
     );

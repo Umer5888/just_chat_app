@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:just_chat/Others/contacts_screen.dart';
@@ -13,20 +13,37 @@ import '../Helper/firebase_helper.dart';
 import '../Models/chat_room_model.dart';
 import '../Models/message_model.dart';
 import '../Models/user_model.dart';
-import '../Others/Animation.dart';
+import '../Others/animation.dart';
 import 'chat_screen.dart';
 
 class ChatListScreen extends StatefulWidget {
   final UserModel userModel;
   final User firebaseUser;
 
-  const ChatListScreen({Key? key, required this.userModel, required this.firebaseUser}) : super(key: key);
+  const ChatListScreen({super.key, required this.userModel, required this.firebaseUser});
 
   @override
   _ChatListScreenState createState() => _ChatListScreenState();
 }
 
 class _ChatListScreenState extends State<ChatListScreen> {
+
+  NotificationServices notificationServices = NotificationServices();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notificationServices.requestNotificationPermissions();
+    notificationServices.firebaseInit(context);
+    notificationServices.getDeviceToken().then((value) {
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
+
+  }
 
   void logOut(BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -37,9 +54,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
           .update({'isOnline': false});
 
       await FirebaseAuth.instance.signOut();
+
       Navigator.of(context).pushAndRemoveUntil(
           SlidePageRoute(
-              page: WelcomeScreen()
+              page: const WelcomeScreen()
           )
           , (route) => false);
     }
@@ -53,7 +71,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       appBar: AppBar(
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.teal],
               begin: Alignment.topLeft,
@@ -69,7 +87,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Text(
+              return const Text(
                 "Welcome,",
                 style: TextStyle(color: Colors.white),
               );
@@ -81,25 +99,25 @@ class _ChatListScreenState extends State<ChatListScreen> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   "Welcome,",
                   style: TextStyle(color: Colors.white),
                 ),
-                SizedBox(width: 4,),
-                Container(
+                const SizedBox(width: 4,),
+                SizedBox(
                   width: 100,
                   child: Text(
                     username,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],
             );
           },
         ),
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white,
         ),
         actions: [
@@ -118,7 +136,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   Navigator.push(
                     context,
                     SlidePageRoute(
-                      page: ContactsScreen(),
+                      page: const ContactsScreen(),
                     ),
                   );
                   break;
@@ -126,11 +144,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
             },
             itemBuilder: (BuildContext context) {
               return [
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: 'Edit Profile',
                   child: Text('Edit Profile'),
                 ),
-                PopupMenuItem(
+                const PopupMenuItem(
                   value: 'My Contacts',
                   child: Text('My Contacts'),
                 ),
@@ -149,7 +167,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             var userDoc = snapshot.data!;
@@ -163,24 +181,24 @@ class _ChatListScreenState extends State<ChatListScreen> {
               padding: EdgeInsets.zero,
               children: [
                 UserAccountsDrawerHeader(
-                  accountName: Container(
+                  accountName: SizedBox(
                     width: 180,
                     child: Text(username,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white
                       ),
                     ),
                   ),
                   accountEmail: Text(email,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.white
                     ),),
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: NetworkImage(profileImage),
                   ),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Colors.green, Colors.teal],
                       begin: Alignment.topLeft,
@@ -189,37 +207,37 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.person, color: Colors.green,),
-                  title: Text("Username"),
+                  leading: const Icon(Icons.person, color: Colors.green,),
+                  title: const Text("Username"),
                   subtitle: Text(username,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.grey
                     ),),
                 ),
                 ListTile(
-                  leading: Icon(Icons.email, color: Colors.green,),
-                  title: Text("Email"),
+                  leading: const Icon(Icons.email, color: Colors.green,),
+                  title: const Text("Email"),
                   subtitle: Text(email,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.grey
                     ),),
                 ),
                 ListTile(
-                  leading: Icon(Icons.phone, color: Colors.green,),
-                  title: Text("Phone Number"),
+                  leading: const Icon(Icons.phone, color: Colors.green,),
+                  title: const Text("Phone Number"),
                   subtitle: Text(phone,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.grey
                     ),
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.notes, color: Colors.green,),
-                  title: Text("About"),
+                  leading: const Icon(Icons.notes, color: Colors.green,),
+                  title: const Text("About"),
                   subtitle: Text(about,
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.grey
                     ),
                   ),
@@ -242,9 +260,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text('Log out',
+                                    title: const Text('Log out',
                                         style: TextStyle(fontSize: 18, color: Colors.red)),
-                                    content: Row(
+                                    content: const Row(
                                       children: [
                                         Text('Are you sure you want to\nLog out?'),
                                       ],
@@ -260,7 +278,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                           onPressed: () async {
                                             logOut(context);
                                           },
-                                          child: Text('Yes', style: TextStyle(color: Colors.white),)
+                                          child: const Text('Yes', style: TextStyle(color: Colors.white),)
                                       ),
                                       ElevatedButton(
                                           style: ElevatedButton.styleFrom(
@@ -272,7 +290,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                           onPressed: (){
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text(
+                                          child: const Text(
                                             textAlign: TextAlign.center,
                                             'No ',
                                             style: TextStyle(color: Colors.white),)
@@ -282,7 +300,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                 }
                             );
                           },
-                          child: Text('Log out', style: TextStyle(color: Colors.white),),
+                          child: const Text('Log out', style: TextStyle(color: Colors.white),),
                         ),
                       ),
                     ],
@@ -298,7 +316,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         child: Column(
           children: [
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -345,59 +363,57 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                               MessageModel lastMessage = MessageModel.fromMap(
                                                   messageDataSnapshot.docs[0].data() as Map<String, dynamic>);
 
-                                              // Format the timestamp
                                               String formattedTime = DateFormat('h:mm a').format(lastMessage.createdon!.toDate());
 
-                                              return Padding(
-                                                padding: const EdgeInsets.only(top: 10),
-                                                child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(10),
+                                              return Card(
+                                                color: Colors.green,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                elevation: 4,
+                                                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                                child: ListTile(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      SlidePageRoute(
+                                                        page: ChatScreen(
+                                                          chatroom: chatRoomModel,
+                                                          firebaseUser: widget.firebaseUser,
+                                                          userModel: widget.userModel,
+                                                          targetUser: targetUser,
+                                                        )
+                                                      ),
+                                                    );
+                                                  },
+                                                  leading: CircleAvatar(
+                                                    backgroundImage: NetworkImage(targetUser.profile.toString()),
+                                                    radius: 25,
                                                   ),
-                                                  elevation: 4,
-                                                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                                                  child: ListTile(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        SlidePageRoute(
-                                                          page: ChatScreen(
-                                                            chatroom: chatRoomModel,
-                                                            firebaseUser: widget.firebaseUser,
-                                                            userModel: widget.userModel,
-                                                            targetUser: targetUser,
-                                                          )
-                                                        ),
-                                                      );
-                                                    },
-                                                    leading: CircleAvatar(
-                                                      backgroundImage: NetworkImage(targetUser.profile.toString()),
-                                                      radius: 25,
-                                                    ),
-                                                    title: Text(
-                                                      targetUser.username.toString(),
-                                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                                    ),
-                                                    subtitle: Text(
-                                                      lastMessage.text.toString(),
-                                                      overflow: TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                      style: TextStyle(color: Colors.grey),
-                                                    ),
-                                                    trailing: Text(
-                                                      formattedTime,
-                                                      style: TextStyle(color: Colors.grey),
-                                                    ),
+                                                  title: Text(
+                                                    targetUser.username.toString(),
+                                                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                                                  ),
+                                                  subtitle: Text(
+                                                    lastMessage.text.toString(),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(color: Colors.white70),
+                                                  ),
+                                                  trailing: Text(
+                                                    formattedTime,
+                                                    style: const TextStyle(color: Colors.white70),
                                                   ),
                                                 ),
                                               );
                                             } else {
                                               return Card(
+                                                surfaceTintColor: Colors.blueGrey,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
                                                 elevation: 4,
-                                                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                                 child: ListTile(
                                                   onTap: () {
                                                     Navigator.push(
@@ -418,36 +434,40 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                   ),
                                                   title: Text(
                                                     targetUser.username.toString(),
-                                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                                    style: const TextStyle(fontWeight: FontWeight.bold),
                                                   ),
-                                                  subtitle: Text(
-                                                    'Say \"Hello\" to your new friend!',
+                                                  subtitle: const Text(
+                                                    'Say "Hello" to your new friend!',
                                                     overflow: TextOverflow.ellipsis,
                                                     maxLines: 1,
                                                     style: TextStyle(color: Colors.black54),
                                                   ),
-                                                  trailing: Icon(Icons.keyboard_arrow_right)
+                                                  trailing: const Icon(Icons.keyboard_arrow_right)
                                                 ),
                                               );
                                             }
                                           } else if (messageSnapshot.hasError) {
-                                            return Center(
+                                            return const Center(
                                               child: Text("Error loading last message"),
                                             );
                                           } else {
-                                            return Center(
+                                            return const Center(
                                               child: Text("No messages found"),
                                             );
                                           }
                                         } else {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
+                                          return const Column(
+                                            children: [
+                                              Center(
+                                                child: CircularProgressIndicator(),
+                                              ),
+                                            ],
                                           );
                                         }
                                       },
                                     );
                                   } else {
-                                    return Text('Nothing to show!');
+                                    return const Text('Nothing to show!');
                                   }
                                 } else {
                                   return Container();
@@ -457,7 +477,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                           },
                         );
                       } else {
-                        return Center(
+                        return const Center(
                           child: Text("No Recent Chats Available!"),
                         );
                       }
@@ -466,13 +486,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
                         child: Text(snapshot.error.toString()),
                       );
                     } else {
-                      return Center(
+                      return const Center(
                         child: Text("No Chats"),
                       );
                     }
                   } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
+                    return const Padding(
+                      padding: EdgeInsets.only(top: 30),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   }
                 },
@@ -490,7 +513,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 userModel: widget.userModel, firebaseUser: widget.firebaseUser)
           ));
         },
-        child: Icon(
+        child: const Icon(
           Icons.search,
           color: Colors.white,
         ),

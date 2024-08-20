@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,11 +7,11 @@ import 'package:form_validator/form_validator.dart';
 
 import '../Helper/ui_helper.dart';
 import '../Models/user_model.dart';
-import '../Others/Animation.dart';
+import '../Others/animation.dart';
 import '../Profile Management/setup_profile_screen.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({ Key? key }) : super(key: key);
+  const SignupScreen({ super.key });
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -62,7 +63,9 @@ class _SignupScreenState extends State<SignupScreen> {
         isOnline: false,
       );
       await FirebaseFirestore.instance.collection("users").doc(uid).set(newUser.toMap()).then((value) {
-        print("New User Created!");
+        if (kDebugMode) {
+          print("New User Created!");
+        }
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacement(
           context,
@@ -82,14 +85,14 @@ class _SignupScreenState extends State<SignupScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 20,
           ),
           child: Center(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,11 +111,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30,),
 
                   TextFormField(
                     controller: emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Email Address",
                       prefixIcon: Icon(Icons.email)
                     ),
@@ -120,12 +123,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   ),
 
-                  SizedBox(height: 15,),
+                  const SizedBox(height: 15,),
 
                   TextFormField(
                     controller: passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Password",
                       prefixIcon: Icon(Icons.password)
                     ),
@@ -133,12 +136,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   ),
 
-                  SizedBox(height: 15,),
+                  const SizedBox(height: 15,),
 
                   TextFormField(
                     controller: cPasswordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         labelText: "Confirm Password",
                         prefixIcon: Icon(Icons.password)
                     ),
@@ -146,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   ),
 
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30,),
 
                   Row(
                     children: [
@@ -155,13 +158,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           onPressed: () {
                             checkValues();
                           },
-                          child: Text('Signup', style: TextStyle(color: Colors.white)),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
+                          child: const Text('Signup', style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ],
@@ -173,26 +176,24 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
 
-            Text("Already have an account?", style: TextStyle(
+          const Text("Already have an account?", style: TextStyle(
+              fontSize: 16
+          ),),
+
+          CupertinoButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Log In", style: TextStyle(
                 fontSize: 16
             ),),
+          ),
 
-            CupertinoButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Log In", style: TextStyle(
-                  fontSize: 16
-              ),),
-            ),
-
-          ],
-        ),
+        ],
       ),
     );
   }

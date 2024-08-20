@@ -12,7 +12,7 @@ import '../Models/user_model.dart';
 class EditProfileScreen extends StatefulWidget {
   final UserModel userModel;
 
-  const EditProfileScreen({Key? key, required this.userModel}) : super(key: key);
+  const EditProfileScreen({super.key, required this.userModel});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -92,7 +92,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Upload Profile Picture"),
+          title: const Text("Upload Profile Picture"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -101,16 +101,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Navigator.pop(context);
                   getGalleryImage();
                 },
-                leading: Icon(Icons.photo_album),
-                title: Text("Select from Gallery"),
+                leading: const Icon(Icons.photo_album),
+                title: const Text("Select from Gallery"),
               ),
               ListTile(
                 onTap: () {
                   Navigator.pop(context);
                   getCameraImage();
                 },
-                leading: Icon(Icons.camera_alt),
-                title: Text("Take a photo"),
+                leading: const Icon(Icons.camera_alt),
+                title: const Text("Take a photo"),
               ),
             ],
           ),
@@ -152,7 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.teal],
               begin: Alignment.topLeft,
@@ -164,16 +164,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
-        title: Text('Edit Profile', style: TextStyle(color: Colors.white)),
+        title: const Text('Edit Profile', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.green,
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('users').doc(userId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           var userDoc = snapshot.data!;
@@ -184,7 +184,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
           return Column(
             children: [
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               GestureDetector(
                 onTap: showPhotoOptions,
                 child: Stack(
@@ -195,15 +195,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       radius: 60,
                       backgroundImage: _profileImageUrl != null ? NetworkImage(_profileImageUrl!) : null,
                       child: _profileImageUrl == null
-                          ? Icon(Icons.camera_alt, size: 50, color: Colors.white)
+                          ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
                           : null,
                     ),
                     if (isImageUploading)
-                      CircularProgressIndicator(color: Colors.white),
+                      const CircularProgressIndicator(color: Colors.white),
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Form(
@@ -212,23 +212,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       TextFormField(
                         controller: _nameController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Username'
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _phoneController,
-                        decoration: InputDecoration(labelText: 'Phone Number'),
+                        decoration: const InputDecoration(labelText: 'Phone Number'),
                         keyboardType: TextInputType.phone,
                         validator: ValidationBuilder().phone().maxLength(11).minLength(11).build(),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _aboutController,
-                        decoration: InputDecoration(labelText: 'About'),
+                        decoration: const InputDecoration(labelText: 'About'),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       Row(
                         children: [
                           Expanded(
@@ -238,18 +238,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   updateProfile();
                                 }
                               },
-                              child: isLoading
-                                  ? SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(color: Colors.white),
-                              )
-                                  : Text('Update Profile',
-                                  style: TextStyle(color: Colors.white)),
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
+                              child: isLoading
+                                  ? const SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(color: Colors.white),
+                              )
+                                  : const Text('Update Profile',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ),
                         ],

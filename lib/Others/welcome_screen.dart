@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_chat/Authentication/login_screen.dart';
-import 'package:just_chat/notification_services.dart';
 import '../Authentication/signup_screen.dart';
 import 'dart:ui';
 
-import 'Animation.dart';
+import 'animation.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -25,7 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
           // Background Image
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/background.jpg'),
                 fit: BoxFit.cover,
@@ -46,7 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -68,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 70),
                   child: Row(
@@ -84,11 +82,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           onPressed: () {
                             Navigator.of(context).push(
                               SlidePageRoute(
-                                page: SignupScreen(),
+                                page: const SignupScreen(),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Signup',
                             style: TextStyle(
                               color: Colors.white,
@@ -99,7 +97,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 70),
                   child: Row(
@@ -116,11 +114,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             Navigator.of(context).push(
                               SlidePageRoute(
                                 page:
-                                LoginScreen(),
+                                const LoginScreen(),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Login',
                             style: TextStyle(
                               color: Colors.white,

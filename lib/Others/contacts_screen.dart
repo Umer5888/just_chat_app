@@ -73,7 +73,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Center(child: const Text('Add New Contact',
+          title: const Center(child: Text('Add New Contact',
           style: TextStyle(
             fontSize: 26
           ),)),
@@ -96,7 +96,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   ),
                   validator: ValidationBuilder().build(),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: phoneController,
                   decoration: const InputDecoration(
@@ -128,7 +128,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('Cancel',
+                child: const Text('Cancel',
                   style: TextStyle(
                     color: Colors.white,
                   ),),
@@ -143,17 +143,19 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     )
                 ),
                 onPressed: () {
-                  if (key.currentState?.validate() ?? false)
+                  if (key.currentState?.validate() ?? false) {
                   if (nameController.text.isNotEmpty && phoneController.text.isNotEmpty) {
                     Contact newContact = Contact(
                       givenName: nameController.text,
                       displayName: nameController.text,
-                      phones: [Item(label: 'mobile', value: phoneController.text)],
+                      phones: [Item(label: 'mobile',
+                          value: phoneController.text)
+                      ],
                     );
 
-                    // Add the contact to the list
                     addContact(newContact);
                     Navigator.of(context).pop();
+                  }
                   }
                 },
                 child: const Text('Add    ',
@@ -175,7 +177,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.teal],
               begin: Alignment.topLeft,
@@ -189,7 +191,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: const Text(
           'Your Contacts',
@@ -240,9 +242,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   ? contacts[index].phones!.first.value ?? ''
                   : 'No Number',
             ),
-            trailing: Row(
+            trailing: const Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
+              children: [
                 Text('Invite'),
                 Icon(Icons.keyboard_arrow_right),
               ],
@@ -266,7 +268,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Cancel',
+                          child: const Text('Cancel',
                             style: TextStyle(
                               color: Colors.white,
                             ),),
@@ -284,7 +286,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             deleteContact(contacts[index]);
                             Navigator.of(context).pop();
                           },
-                          child: Text('Delete',
+                          child: const Text('Delete',
                             style: TextStyle(
                               color: Colors.white,
                             ),),

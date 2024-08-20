@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../Helper/ui_helper.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
   @override
   _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
@@ -36,10 +38,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Icon(Icons.arrow_back, color: Colors.white),
+          child: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.teal],
               begin: Alignment.topLeft,
@@ -47,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
         ),
-        title: Text('Forgot Password', style: TextStyle(color: Colors.white),),
+        title: const Text('Forgot Password', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.green,
       ),
       body: Padding(
@@ -56,7 +58,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
+              const Row(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,28 +77,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Email Address',
                   prefixIcon: Icon(Icons.email),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                       onPressed: resetPassword,
-                      child: Text('Send Reset Link', style: TextStyle(color: Colors.white),),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
-                      )
+                      ),
+                      child: const Text('Send Reset Link', style: TextStyle(color: Colors.white),)
                     ),
                   ),
                 ],

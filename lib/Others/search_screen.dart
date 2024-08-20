@@ -3,19 +3,18 @@ import 'dart:developer';
 import 'package:just_chat/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../Models/chat_room_model.dart';
 import '../Models/user_model.dart';
 import '../Chat Screens/chat_screen.dart';
-import 'Animation.dart';
+import 'animation.dart';
 
 class SearchScreen extends StatefulWidget {
   final UserModel userModel;
   final User firebaseUser;
 
-  const SearchScreen({Key? key, required this.userModel, required this.firebaseUser}) : super(key: key);
+  const SearchScreen({super.key, required this.userModel, required this.firebaseUser});
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -23,7 +22,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController searchController = TextEditingController();
-  bool isLoading = false;  // Add this variable
+  bool isLoading = false;
 
   Future<ChatRoomModel?> getChatroomModel(UserModel targetUser) async {
     ChatRoomModel? chatRoom;
@@ -35,13 +34,15 @@ class _SearchScreenState extends State<SearchScreen> {
         .get();
 
     if (snapshot.docs.isNotEmpty) {
-      // Fetch the existing one
+
+      // Fetching the existing chatroom
       var docData = snapshot.docs[0].data();
       ChatRoomModel existingChatroom = ChatRoomModel.fromMap(docData as Map<String, dynamic>);
 
       chatRoom = existingChatroom;
     } else {
-      // Create a new one
+
+      // Creating new chatroom
       ChatRoomModel newChatroom = ChatRoomModel(
         chatroomId: uuid.v1(),
         lastMessage: "",
@@ -71,7 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.teal],
               begin: Alignment.topLeft,
@@ -85,18 +86,18 @@ class _SearchScreenState extends State<SearchScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
-        title: Text("Search", style: TextStyle(color: Colors.white)),
+        title: const Text("Search", style: TextStyle(color: Colors.white)),
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             children: [
               TextFormField(
                 controller: searchController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Full Name",
                   prefixIcon: Icon(Icons.search),
                 ),
@@ -104,7 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   setState(() {});
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("users")
@@ -122,17 +123,18 @@ class _SearchScreenState extends State<SearchScreen> {
                         UserModel searchedUser = UserModel.fromMap(userMap);
 
                         return Card(
+                          color: Colors.green,
                           elevation: 4,
                           child: ListTile(
                             onTap: () async {
                               setState(() {
-                                isLoading = true;  // Set loading to true when tile is clicked
+                                isLoading = true;
                               });
 
                               ChatRoomModel? chatroomModel = await getChatroomModel(searchedUser);
 
                               setState(() {
-                                isLoading = false;  // Set loading to false after chat room is created
+                                isLoading = false;
                               });
 
                               if (chatroomModel != null) {
@@ -154,23 +156,23 @@ class _SearchScreenState extends State<SearchScreen> {
                               backgroundImage: NetworkImage(searchedUser.profile!),
                               backgroundColor: Colors.grey[500],
                             ),
-                            title: Text(searchedUser.username!),
-                            subtitle: Text(searchedUser.email!),
+                            title: Text(searchedUser.username!, style: const TextStyle(color: Colors.white),),
+                            subtitle: Text(searchedUser.email!, style: const TextStyle(color: Colors.white70),),
                             trailing: isLoading
-                                ? CircularProgressIndicator()
-                                : Icon(Icons.keyboard_arrow_right),
+                                ? const CircularProgressIndicator()
+                                : const Icon(Icons.keyboard_arrow_right, color: Colors.white,),
                           ),
                         );
                       } else {
-                        return Text("No results found!");
+                        return const Text("No results found!");
                       }
                     } else if (snapshot.hasError) {
-                      return Text("An error occurred!");
+                      return const Text("An error occurred!");
                     } else {
-                      return Text("No results found!");
+                      return const Text("No results found!");
                     }
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),

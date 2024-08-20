@@ -17,13 +17,13 @@ class ChatScreen extends StatefulWidget {
   final String? id;
 
   const ChatScreen({
-    Key? key,
+    super.key,
     this.id,
     required this.targetUser,
     required this.chatroom,
     required this.userModel,
     required this.firebaseUser,
-  }) : super(key: key);
+  });
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -37,6 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
     messageController.clear();
 
     if (msg != "") {
+
       // Send Message
       MessageModel newMessage = MessageModel(
         messageId: uuid.v1(),
@@ -74,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.teal],
               begin: Alignment.topLeft,
@@ -86,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Icon(Icons.arrow_back, color: Colors.white),
+          child: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: Row(
           children: [
@@ -95,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
               backgroundImage: NetworkImage(widget.targetUser.profile.toString()),
               radius: 20,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     widget.targetUser.username.toString(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
@@ -113,14 +114,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Text(
+                        return const Text(
                           'Loading...',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         );
                       }
 
                       if (snapshot.hasError) {
-                        return Text(
+                        return const Text(
                           'Error loading status',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         );
@@ -135,16 +136,16 @@ class _ChatScreenState extends State<ChatScreen> {
                               radius: 5,
                               backgroundColor: isOnline ? Colors.greenAccent : Colors.red,
                             ),
-                            SizedBox(width: 5),
+                            const SizedBox(width: 5),
                             Text(
                               isOnline ? 'Online' : 'Offline',
-                              style: TextStyle(color: Colors.white, fontSize: 12),
+                              style: const TextStyle(color: Colors.white, fontSize: 12),
                             ),
                           ],
                         );
                       }
 
-                      return Text(
+                      return const Text(
                         'Loading...',
                         style: TextStyle(color: Colors.white, fontSize: 12),
                       );
@@ -159,168 +160,167 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
 
       body: SafeArea(
-        child: Container(
-          child: Column(
-            children: [
-              // Our Chats
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection("chatrooms")
-                        .doc(widget.chatroom.chatroomId)
-                        .collection("messages")
-                        .orderBy("createdon", descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.active) {
-                        if (snapshot.hasData) {
-                          QuerySnapshot dataSnapshot =
-                          snapshot.data as QuerySnapshot;
+        child: Column(
+          children: [
 
-                          return ListView.builder(
-                            reverse: true,
-                            itemCount: dataSnapshot.docs.length,
-                            itemBuilder: (context, index) {
-                              MessageModel currentMessage =
-                              MessageModel.fromMap(dataSnapshot.docs[index]
-                                  .data() as Map<String, dynamic>);
+            // Our Chats
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("chatrooms")
+                      .doc(widget.chatroom.chatroomId)
+                      .collection("messages")
+                      .orderBy("createdon", descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      if (snapshot.hasData) {
+                        QuerySnapshot dataSnapshot =
+                        snapshot.data as QuerySnapshot;
 
-                              bool isSentByUser =
-                                  currentMessage.sender == widget.userModel.uid;
-                              return Align(
-                                alignment: isSentByUser
-                                    ? Alignment.centerRight
-                                    : Alignment.centerLeft,
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 16),
-                                  decoration: BoxDecoration(
-                                    color: isSentByUser
-                                        ? Colors.green
-                                        : Colors.blueGrey,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(
-                                          isSentByUser ? 12 : 0),
-                                      bottomRight: Radius.circular(
-                                          isSentByUser ? 0 : 12),
+                        return ListView.builder(
+                          reverse: true,
+                          itemCount: dataSnapshot.docs.length,
+                          itemBuilder: (context, index) {
+                            MessageModel currentMessage =
+                            MessageModel.fromMap(dataSnapshot.docs[index]
+                                .data() as Map<String, dynamic>);
+
+                            bool isSentByUser =
+                                currentMessage.sender == widget.userModel.uid;
+                            return Align(
+                              alignment: isSentByUser
+                                  ? Alignment.centerRight
+                                  : Alignment.centerLeft,
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: isSentByUser
+                                      ? Colors.green
+                                      : Colors.blueGrey,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: const Radius.circular(12),
+                                    topRight: const Radius.circular(12),
+                                    bottomLeft: Radius.circular(
+                                        isSentByUser ? 12 : 0),
+                                    bottomRight: Radius.circular(
+                                        isSentByUser ? 0 : 12),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: 1,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
                                     ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        spreadRadius: 1,
-                                        blurRadius: 5,
-                                        offset: Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        currentMessage.text.toString(),
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            formatTimestamp(
-                                                currentMessage.createdon!),
-                                            style: TextStyle(
-                                              color: Colors.white70,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          SizedBox(width: 5),
-                                          if (isSentByUser)
-                                            Icon(
-                                              currentMessage.seen!
-                                                  ? Icons.done_all
-                                                  : Icons.done,
-                                              size: 16,
-                                              color: Colors.white70,
-                                            ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                  ],
                                 ),
-                              );
-                            },
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                            child: Text(
-                                "An error occurred! Please check your internet connection."),
-                          );
-                        } else {
-                          return Center(
-                            child: Text("Say hi to your new friend"),
-                          );
-                        }
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      currentMessage.text.toString(),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          formatTimestamp(
+                                              currentMessage.createdon!),
+                                          style: const TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        if (isSentByUser)
+                                          Icon(
+                                            currentMessage.seen!
+                                                ? Icons.done_all
+                                                : Icons.done,
+                                            size: 16,
+                                            color: Colors.white70,
+                                          ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                          child: Text(
+                              "An error occurred! Please check your internet connection."),
+                        );
                       } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
+                        return const Center(
+                          child: Text("Say \"Hello\"to your new friend"),
                         );
                       }
-                    },
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              color: Colors.grey[200],
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: TextFormField(
+                        controller: messageController,
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          constraints: const BoxConstraints(maxHeight: 150),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Enter message",
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                color: Colors.grey[200],
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: TextFormField(
-                          controller: messageController,
-                          maxLines: null,
-                          decoration: InputDecoration(
-                            constraints: BoxConstraints(maxHeight: 150),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide.none,
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: "Enter message",
-                          ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: sendMessage,
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [Colors.green, Colors.teal],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
                       ),
+                      child: const Icon(Icons.send, color: Colors.white),
                     ),
-                    SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: sendMessage,
-                      child: Container(
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [Colors.green, Colors.teal],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        child: Icon(Icons.send, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
